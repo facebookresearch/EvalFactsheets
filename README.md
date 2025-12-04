@@ -6,7 +6,7 @@ A web-based tool for generating standardized LaTeX/Markdown/Yaml/CSV evaluation 
 
 **Try it now:** [https://facebookresearch.github.io/EvalFactsheets](https://facebookresearch.github.io/EvalFactsheets)
 
-*Link to the paper:* [https://facebookresearch.github.io/EvalFactsheets](https://facebookresearch.github.io/EvalFactsheets)
+*Link to the paper:* [https://arxiv.org/abs/2512.04062](https://arxiv.org/abs/2512.04062)
 
 
 ## What are Eval Factsheets?
