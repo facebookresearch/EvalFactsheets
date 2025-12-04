@@ -1,0 +1,652 @@
+<!-- Copyright (c) Meta Platforms, Inc. and affiliates. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eval Factsheets</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <h1>Eval Factsheet</h1>
+            </div>
+            <p class="subtitle">Create and explore evaluation benchmarks </p>
+            
+            <!-- Tab Navigation -->
+            <nav class="tab-navigation">
+                <button class="tab-button active" data-tab="form">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Create Factsheet
+                </button>
+                <button class="tab-button" data-tab="explorer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    Explore Factsheets
+                </button>
+            </nav>
+        </header>
+
+        <!-- Form Tab Content -->
+        <div id="form-tab" class="tab-content active">
+<form id="evaluationForm">
+            <!-- Section 1: Basic Information -->
+            <section class="form-section">
+                <h2><center>Basic Information</center></h2>
+                
+                <div class="form-group">
+                    <label for="title">Title *</label>
+                    <input type="text" id="title" required placeholder="Name of your evaluation/benchmark">
+                    <small>The official name of your evaluation or benchmark (e.g., "MMLU", "HumanEval")</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitle">Description *</label>
+                    <textarea id="subtitle" required placeholder="Brief description of the evaluation"></textarea>
+                    <small>A concise description of what your evaluation measures (1-2 sentences)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="authors">Org/University/Company/Lab/Authors *</label>
+                    <input type="text" id="authors" required placeholder="Who made this evaluation?">
+                    <small>Who made this evaluation?</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="code_link">Link to your evaluation code</label>
+                    <input type="url" id="code_link" placeholder="https://github.com/...">
+                    <small>URL to the repository containing your evaluation implementation</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="link">Link to the associated research paper</label>
+                    <input type="url" id="link" placeholder="https://arxiv.org/...">
+                    <small>URL to the paper or documentation describing your evaluation</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date *</label>
+                    <input type="date" id="date">
+                    <small>Publication or release date of the evaluation</small>
+                </div>
+            </section>
+
+            <!-- Section 2: What Does It Evaluate? -->
+            <section class="form-section">
+                <h2><center>What Does It Evaluate?</center></h2>
+                <p class="section-description">Define the purpose and scope of your evaluation.</p>
+
+                <div class="form-group">
+                    <label for="purpose">Purpose</label>
+                    <div class="select-with-controls">
+                        <select id="purpose" multiple size="4">
+                            <option value="Development">Development (guide training and improvement)</option>
+                            <option value="Selection">Selection (choose between models)</option>
+                            <option value="Deployment">Deployment (assess production readiness)</option>
+                            <option value="Research">Research (advance scientific understanding)</option>
+                        </select>
+                        <button type="button" class="clear-btn" data-target="purpose">Clear All</button>
+                    </div>
+                    <small>Hold Ctrl/Cmd to select multiple. Click to deselect. Select the primary intended use case(s) for this evaluation.</small>
+                    <div class="custom-option">
+                        <input type="text" id="purposeCustom" placeholder="Add another purpose (optional)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="principlesTested">Capabilities Tested</label>
+                    <textarea id="principlesTested" placeholder="e.g., Intuitive Physics, Common Sense Reasoning"></textarea>
+                    <small>Name the specific capabilities your evaluation targets</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="functionalProps">Model Properties Evaluated</label>
+                    <div class="select-with-controls">
+                        <select id="functionalProps" multiple size="5">
+                            <option value="Core Performance">Core Performance</option>
+                            <option value="Core Quality Dimensions">Core Quality Dimensions</option>
+                            <option value="Robustness">Robustness</option>
+                            <option value="Calibration">Calibration</option>
+                            <option value="Adversarial">Adversarial</option>
+                            <option value="Memorization">Memorization</option>
+                            <option value="Fairness">Fairness</option>
+                            <option value="Safety">Safety</option>
+                            <option value="Leakage/Contamination">Leakage/Contamination</option>
+                            <option value="Privacy">Privacy</option>
+                            <option value="Interpretability">Interpretability</option>
+                            <option value="Efficiency">Efficiency</option>
+                            <option value="Retrainability">Retrainability</option>
+                            <option value="Meta-Learning">Meta-Learning</option>
+                        </select>
+                        <button type="button" class="clear-btn" data-target="functionalProps">Clear All</button>
+                    </div>
+                    <small>Hold Ctrl/Cmd to select multiple. Click to deselect. Select the high-level properties your evaluation assesses.</small>
+                    <div class="custom-option">
+                        <input type="text" id="functionalPropsCustom" placeholder="Add another property">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputModality">Input Modality (what the model receives)</label>
+                    <div class="select-with-controls">
+                        <select id="inputModality" multiple size="10">
+                            <optgroup label="Single Modality">
+                                <option value="Text">Text</option>
+                                <option value="Vision (Image)">Vision (Image)</option>
+                                <option value="Video">Video</option>
+                                <option value="Audio">Audio</option>
+                                <option value="Speech">Speech</option>
+                                <option value="Code">Code</option>
+                                <option value="Structured Data">Structured Data</option>
+                            </optgroup>
+                            <optgroup label="Multimodal">
+                                <option value="Text + Vision">Text + Vision</option>
+                                <option value="Text + Audio">Text + Audio</option>
+                                <option value="Text + Video">Text + Video</option>
+                                <option value="Vision + Audio">Vision + Audio</option>
+                                <option value="Text + Vision + Audio">Text + Vision + Audio</option>
+                                <option value="Text + Code">Text + Code</option>
+                                <option value="Multimodal (other)">Multimodal (other combination)</option>
+                            </optgroup>
+                        </select>
+                        <button type="button" class="clear-btn" data-target="inputModality">Clear All</button>
+                    </div>
+                    <small>Hold Ctrl/Cmd to select multiple. Click to deselect. Select the type(s) of input data your evaluation uses.</small>
+                    <div class="custom-option">
+                        <input type="text" id="inputModalityCustom" placeholder="Or specify another input modality">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="outputModality">Output Modality (what the model produces)</label>
+                    <div class="select-with-controls">
+                        <select id="outputModality" multiple size="10">
+                            <optgroup label="Single Modality">
+                                <option value="Text">Text</option>
+                                <option value="Vision (Image)">Vision (Image)</option>
+                                <option value="Video">Video</option>
+                                <option value="Audio">Audio</option>
+                                <option value="Speech">Speech</option>
+                                <option value="Code">Code</option>
+                                <option value="Structured Data">Structured Data</option>
+                                <option value="Actions">Actions</option>
+                                <option value="Scores/Embeddings">Scores/Embeddings</option>
+                            </optgroup>
+                            <optgroup label="Multimodal">
+                                <option value="Text + Vision">Text + Vision</option>
+                                <option value="Text + Audio">Text + Audio</option>
+                                <option value="Text + Video">Text + Video</option>
+                                <option value="Vision + Audio">Vision + Audio</option>
+                                <option value="Text + Vision + Audio">Text + Vision + Audio</option>
+                                <option value="Text + Code">Text + Code</option>
+                                <option value="Multimodal (other)">Multimodal (other combination)</option>
+                            </optgroup>
+                        </select>
+                        <button type="button" class="clear-btn" data-target="outputModality">Clear All</button>
+                    </div>
+                    <small>Hold Ctrl/Cmd to select multiple. Click to deselect. Select the type(s) of output expected from models.</small>
+                    <div class="custom-option">
+                        <input type="text" id="outputModalityCustom" placeholder="Or specify another output modality">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: How Is It Built? -->
+            <section class="form-section">
+                <h2><center>How Is It Built?</center></h2>
+                <p class="section-description">Describe the data sources, size, and structure of your evaluation.</p>
+
+                <div class="form-group">
+                    <label for="inputSource">Input Data Source</label>
+                    <select id="inputSource" multiple size="10">
+                        <option value="">-- None --</option>
+                        <optgroup label="Existing Datasets">
+                            <option value="MS COCO">MS COCO</option>
+                            <option value="ImageNet">ImageNet</option>
+                            <option value="Common Crawl">Common Crawl</option>
+                            <option value="Wikipedia">Wikipedia</option>
+                            <option value="OpenWebText">OpenWebText</option>
+                            <option value="LibriSpeech">LibriSpeech</option>
+                            <option value="AudioSet">AudioSet</option>
+                            <option value="Kinetics">Kinetics (Video)</option>
+                            <option value="GitHub Repositories">GitHub Repositories</option>
+                            <option value="One or Multiple existing datasets">One or Multiple existing datasets</option>
+                        </optgroup>
+                        <optgroup label="New/Custom">
+                            <option value="New dataset (released with eval)">New dataset (released with evaluation)</option>
+                            <option value="Proprietary/Closed dataset">Proprietary/Closed dataset</option>
+                            <option value="Synthetic/Generated">Synthetic/Generated data</option>
+                            <option value="Procedurally generated">Procedurally generated</option>
+                        </optgroup>
+                        <optgroup label="Sourced">
+                            <option value="Crowdsourced">Crowdsourced</option>
+                            <option value="Expert-curated">Expert-curated</option>
+                            <option value="User-generated content">User-generated content</option>
+                            <option value="Real-world deployment">Real-world deployment data</option>
+                        </optgroup>
+                        <option value="Mixed sources">Mixed sources</option>
+                    </select>
+                    <small>Specify where the input data for your evaluation comes from</small>
+                    <div class="custom-option">
+                        <input type="text" id="inputSourceCustom" placeholder="Or specify custom input source (e.g., 'LAION-5B', 'Custom medical images')">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="outputSource">Output Reference/Ground Truth Source</label>
+                    <select id="outputSource" multiple size="10">
+                        <option value="">-- None --</option>
+                        <optgroup label="Human-Provided">
+                            <option value="Human annotations">Human annotations</option>
+                            <option value="Expert annotations">Expert annotations (domain specialists)</option>
+                            <option value="Crowdsourced annotations">Crowdsourced annotations</option>
+                            <option value="Author-provided">Author-provided ground truth</option>
+                        </optgroup>
+                        <optgroup label="Existing References">
+                            <option value="Existing dataset labels">Existing dataset labels</option>
+                            <option value="Published references">Published references/benchmarks</option>
+                            <option value="Gold standard corpus">Gold standard corpus</option>
+                        </optgroup>
+                        <optgroup label="Generated/Derived">
+                            <option value="Programmatically generated">Programmatically generated</option>
+                            <option value="Simulation-based">Simulation-based</option>
+                            <option value="Rule-based">Rule-based ground truth</option>
+                            <option value="Derived from execution">Derived from code execution</option>
+                        </optgroup>
+                        <optgroup label="Model-Based">
+                            <option value="Model-generated references">Model-generated references</option>
+                            <option value="Consensus from multiple models">Consensus from multiple models</option>
+                        </optgroup>
+                        <option value="No reference (reference-free)">No reference needed (reference-free evaluation)</option>
+                        <option value="Multiple/Mixed sources">Multiple/Mixed sources</option>
+                    </select>
+                    <small>Specify how the ground truth or reference outputs were created</small>
+                    <div class="custom-option">
+                        <input type="text" id="outputSourceCustom" placeholder="Or specify custom output source (e.g., 'Physics engine ground truth', 'Medical expert consensus')">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="size">Size</label>
+                    <select id="size">
+                        <option value="">-- None --</option>
+                        <option value="Small (< 1K samples)">Small (< 1K samples)</option>
+                        <option value="Medium (1K - 100K samples)">Medium (1K - 100K samples)</option>
+                        <option value="Large (100K - 1M samples)">Large (100K - 1M samples)</option>
+                        <option value="Very Large (> 1M samples)">Very Large (> 1M samples)</option>
+                        <option value="Huge (> 10M samples)">Huge (> 10M samples)</option>
+                        <option value="Very Huge (> 100M samples)">Very Huge (> 100M samples)</option>
+                        <option value="Gigantic (> 1B samples)">Gigantic (> 1B samples)</option>
+                        <option value="Infinite">Infinite samples (e.g., continuous automated generation of eval data)</option>
+                    </select>
+                    <small>Specify the number of evaluation samples in your benchmark</small>
+                    <div class="custom-option">
+                        <input type="text" id="sizeCustom" placeholder="Or specify another size">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="splits">Evaluation Splits</label>
+                    <textarea id="splits" placeholder="e.g., Val and Test"></textarea>
+                    <small>Specify the data splits used for the evaluation (e.g., fine-tuning set, validation, test)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="design">Evaluation Data Type</label>
+                    <select id="design">
+                        <option value="">-- None --</option>
+                        <option value="Fixed data-driven (static test set)">Static data (e.g., static data or static environment)</option>
+                        <option value="Dynamic data-driven (adaptive/interactive)">Dynamic data (adaptive, new data, environments are generated)</option>
+                        <option value="Composite">Composite (multiple types)</option>
+                    </select>
+                    <small>Specify whether the evaluation uses a fixed dataset or adapts based on model responses</small>
+                    <div class="custom-option">
+                        <input type="text" id="designCustom" placeholder="Or specify custom design">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: How Does It Work? -->
+            <section class="form-section">
+                <h2><center>How Does It Work?</center></h2>
+                <p class="section-description">Explain the methodology and execution of your evaluation.</p>
+
+                <div class="form-group">
+                    <label for="judge">Judge Type</label>
+                    <select id="judge">
+                        <option value="Human: Experts">Human: Experts</option>
+                        <option value="Human: Representative sample">Human: Representative sample</option>
+                        <option value="Automatic (Reference-based)">Reference-based - e.g., having ground-truth labels</option>
+                        <option value="Automatic (Reference-free)">Reference-free</option>
+                        <option value="Automatic (Execution-based)">Execution-based - e.g., using a python interpreter to check if generated code was successful</option>
+                        <option value="Model-based: Expert">Model-based: Expert - e.g., using a fine-tuned/expert model as evaluation judge</option>
+                        <option value="Model-based: In the wild">Model-based: In the wild - e.g., using a common LLM as evaluation judge</option>
+                        <option value="Hybrid">Hybrid (Human + Automatic)</option>
+                    </select>
+                    <small>Select who or what evaluates the model outputs</small>
+                    <div class="custom-option">
+                        <input type="text" id="judgeCustom" placeholder="Or specify another judge type">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="protocol">Evaluation Protocol</label>
+                    <textarea id="protocol" placeholder="Each line becomes a protocol item. Use LaTeX icons if needed."></textarea>
+                    <small>Describe the step-by-step procedure for evaluation, one step per line</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="modelAccess">Model Access Level Required</label>
+                    <select id="modelAccess">
+                        <option value="">-- None --</option>
+                        <option value="Outputs">Outputs only (e.g., can use a model through an API)</option>
+                        <option value="Partial">Partial access (e.g., need to get at least some gradients or intermediate representations)</option>
+                        <option value="Full">Full (e.g., need to access the model's weights to run the eval)</option>
+                    </select>
+                    <small>Specify what level of model access is required to run this evaluation</small>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="hasHeldout" style="width: auto; margin-right: 8px;">
+                        Has held-out private test set
+                    </label>
+                    <small>Check if your evaluation includes a private test set not publicly available</small>
+                </div>
+                
+                <div class="form-group" id="heldoutDetailsGroup">
+                    <label for="heldoutDetails">Held-out Test Details</label>
+                    <textarea id="heldoutDetails" rows="3" placeholder="Describe the held-out test set:
+- Size and composition
+- Access restrictions
+- Update frequency
+- Purpose (e.g., preventing overfitting, detecting contamination)"></textarea>
+                    <small>Provide details about your private held-out test set</small>
+                </div>
+            </section>
+
+            <!-- Section 5: Quality & Reliability -->
+            <section class="form-section">
+                <h2><center>Alignment</center></h2>
+                <p class="section-description">Document the quality assurance measures and known limitations of your evaluation.</p>
+
+                <div class="form-group">
+                    <label for="alignmentValidation">Measurement Validation</label>
+                    <textarea id="alignmentValidation" placeholder="Write about how you make sure that this evaluation is aligned to what you would like to measure"></textarea>
+                    <small>Describe validation steps taken to ensure construct validity (e.g., expert review, pilot studies, correlation with known measures)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="isValid">How many conditions of the construct validity checklist of <a href="https://oxrml.com/measuring-what-matters/checklist.html?state=22wydc">Bean et al. 2025</a> your evaluations check?</label>
+                    <select id="isValid">
+                        <option value=unknown"">-- Not yet assessed --</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                    </select>
+                    <small>Select a score if your evaluation meet somes or all the conditions of the construct validity checklist</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="baselineModels">Baselines</label>
+                    <textarea id="baselineModels" placeholder="Each line becomes a baseline item (e.g., you can specify any model, random, human baseline results there)"></textarea>
+                    <small>List baselines with their performance scores, one per line</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="robustnessMeasures">Robustness Measures Applied</label>
+                    <div class="select-with-controls">
+                        <select id="robustnessMeasures" multiple size="8">
+                            <optgroup label="Input Variations">
+                                <option value="Prompt variations tested">Prompt variations tested (different phrasings)</option>
+                                <option value="Instruction formats tested">Multiple instruction formats tested</option>
+                                <option value="Example ordering varied">Example ordering randomized/varied</option>
+                                <option value="Paraphrasing tested">Paraphrased inputs tested</option>
+                            </optgroup>
+                            <optgroup label="Output Variations">
+                                <option value="Multiple runs per sample">Multiple evaluation runs per sample</option>
+                                <option value="Temperature sensitivity tested">Temperature/sampling sensitivity tested</option>
+                                <option value="Seed variation tested">Random seed variation tested</option>
+                                <option value="Repeated evaluations">Repeated evaluations over time</option>
+                            </optgroup>
+                            <optgroup label="Confound Controls">
+                                <option value="Ablation studies">Ablation studies conducted</option>
+                                <option value="Negative controls">Negative controls included</option>
+                                <option value="Minimal pairs tested">Minimal pair testing (small targeted changes)</option>
+                                <option value="Adversarial examples">Adversarial examples included</option>
+                            </optgroup>
+                            <optgroup label="Statistical Validation">
+                                <option value="Inter-rater reliability">Inter-rater reliability measured</option>
+                                <option value="Confidence intervals">Confidence intervals reported</option>
+                                <option value="Significance testing">Statistical significance testing performed</option>
+                                <option value="Effect size reported">Effect sizes reported</option>
+                            </optgroup>
+                        </select>
+                        <button type="button" class="clear-btn" data-target="robustnessMeasures">Clear All</button>
+                    </div>
+                    <small>Hold Ctrl/Cmd to select multiple. Click to deselect. Select any robustness testing measures you've applied.</small>
+                    <div class="custom-option">
+                        <textarea id="robustnessMeasuresCustom" placeholder="Add another robustness measure or describe specific robustness tests conducted, results, and findings."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="knownLimitations">Known Sensitivities & Limitations</label>
+                    <textarea id="knownLimitations" rows="3" placeholder="Document known sensitivities or limitations of the evaluation. For example:
+- Sensitive to prompt formatting (±5% variance)
+- Performance depends on instruction clarity
+- Some items affected by model verbosity preferences"></textarea>
+                    <small>Document any known weaknesses or sensitivities in your evaluation</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="benchmarksList">Similar Evaluations</label>
+                    <textarea id="benchmarksList" placeholder="What are the closest evaluations or benchmarks to the one you are proposing? What are the differences?"></textarea>
+                    <small>List related benchmarks and explain how your evaluation differs or improves upon them</small>
+                </div>
+            </section>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Generate Code</button>
+                <button type="button" class="btn btn-secondary" id="resetBtn">Reset Form</button>
+            </div>
+        </form>
+
+<!-- Output Section -->
+        <section id="outputSection" class="output-section" style="display: none;">
+            <div class="output-header">
+                <h2>📄 Generated Code</h2>
+                <div class="format-toggle">
+                    <button type="button" class="format-btn active" data-format="latex">LaTeX</button>
+                    <button type="button" class="format-btn" data-format="markdown">Markdown</button>
+                    <button type="button" class="format-btn" data-format="yaml">YAML</button>
+                    <button type="button" class="format-btn" data-format="csv" id="csvCopySection">CSV</button>
+                </div>
+            </div>
+            <!-- CSV Submission Helper (only shown for CSV format) -->
+            <div id="csvGithubHelper" style="display: block; margin-top:24px;">
+                <h3>Submit Your Evaluation to GitHub</h3>
+                <ol>
+                    <li>Copy the CSV line below (no header):</li>
+                    <li>
+                        <textarea id="csvCopyBox" rows="2" style="width:100%; font-family:monospace; font-size:14px;" readonly></textarea>
+                        <button type="button" id="copyCsvBtn" class="btn btn-secondary" style="margin-top:8px;">📋 Copy CSV Line</button>
+                    </li>
+                    <li>
+                        <strong>Click "Add to GitHub" below:</strong>
+                        <button type="button" id="githubPRBtn" class="btn btn-success" style="margin-left:8px;">🚀 Add to GitHub</button>
+                    </li>
+                    <li>
+                        In the GitHub editor, paste the CSV line at the end of <code>evaluation_cards_database.csv</code>, fill in the commit message, and submit your pull request.
+                    </li>
+                </ol>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-primary" id="copyBtn">📋 Copy to Clipboard</button>
+                <button type="button" class="btn btn-secondary" id="downloadBtn">💾 Download File</button>
+            </div>
+            <pre id="output"></pre>
+        </section>
+    </div>
+        
+        <!-- Explorer Tab Content -->
+        <div id="explorer-tab" class="tab-content">
+<div class="search-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by title, authors, purpose, or any field...">
+                <button id="clearSearch">Clear</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="modalityFilter">Input Modality:</label>
+                    <select id="modalityFilter">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="purposeFilter">Purpose:</label>
+                    <select id="purposeFilter">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="designFilter">Design:</label>
+                    <select id="designFilter">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="validFilter">Validation Status:</label>
+                    <select id="validFilter">
+                        <option value="">All</option>
+                        <option value="yes">Valid</option>
+                        <option value="no">Not Valid</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="column-toggle-section">
+                <button id="toggleColumns" class="toggle-btn">Show/Hide Columns</button>
+                <div id="columnToggles" class="column-toggles hidden">
+                    <label><input type="checkbox" class="col-toggle" data-col="title" checked> Title</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="subtitle"> Subtitle</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="authors" checked> Authors</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="date" checked> Date</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="purpose" checked> Purpose</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="principles_tested"> Principles Tested</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="functional_props"> Functional Props</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="input_modality" checked> Input Modality</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="output_modality"> Output Modality</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="input_source"> Input Source</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="output_source"> Output Source</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="size"> Size</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="splits"> Splits</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="design"> Design</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="judge"> Judge</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="protocol"> Protocol</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="model_access"> Model Access</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="has_heldout"> Has Heldout</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="heldout_details"> Heldout Details</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="alignment_validation"> Alignment Valid.</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="is_valid" checked> Is Valid</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="baseline_models"> Baseline Models</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="robustness_measures"> Robustness</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="known_limitations"> Limitations</label>
+                    <label><input type="checkbox" class="col-toggle" data-col="benchmarks_list"> Benchmarks List</label>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <span id="resultCount">0 results</span>
+                <button id="exportCSV" class="export-btn">Export to CSV</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th data-sort="title" data-col="title">Title <span class="sort-icon">↕</span></th>
+                        <th data-sort="subtitle" data-col="subtitle" class="hidden">Subtitle <span class="sort-icon">↕</span></th>
+                        <th data-sort="authors" data-col="authors" class="hidden">Authors <span class="sort-icon">↕</span></th>
+                        <th data-sort="date" data-col="date">Date <span class="sort-icon">↕</span></th>
+                        <th data-sort="purpose" data-col="purpose" class="hidden">Purpose <span class="sort-icon">↕</span></th>
+                        <th data-sort="principles_tested" data-col="principles_tested" class="hidden">Principles <span class="sort-icon">↕</span></th>
+                        <th data-sort="functional_props" data-col="functional_props" class="hidden">Functional Props <span class="sort-icon">↕</span></th>
+                        <th data-sort="input_modality" data-col="input_modality">Input Mod. <span class="sort-icon">↕</span></th>
+                        <th data-sort="output_modality" data-col="output_modality">Output Mod. <span class="sort-icon">↕</span></th>
+                        <th data-sort="input_source" data-col="input_source">Input Source <span class="sort-icon">↕</span></th>
+                        <th data-sort="output_source" data-col="output_source" class="hidden">Output Source <span class="sort-icon">↕</span></th>
+                        <th data-sort="size" data-col="size" class="hidden">Size <span class="sort-icon">↕</span></th>
+                        <th data-sort="splits" data-col="splits" class="hidden">Splits <span class="sort-icon">↕</span></th>
+                        <th data-sort="design" data-col="design" class="hidden">Design <span class="sort-icon">↕</span></th>
+                        <th data-sort="judge" data-col="judge">Judge <span class="sort-icon">↕</span></th>
+                        <th data-sort="protocol" data-col="protocol" class="hidden">Protocol <span class="sort-icon">↕</span></th>
+                        <th data-sort="model_access" data-col="model_access" class="hidden">Model Access <span class="sort-icon">↕</span></th>
+                        <th data-sort="has_heldout" data-col="has_heldout">Has Heldout <span class="sort-icon">↕</span></th>
+                        <th data-sort="heldout_details" data-col="heldout_details" class="hidden">Heldout Details <span class="sort-icon">↕</span></th>
+                        <th data-sort="alignment_validation" data-col="alignment_validation" class="hidden">Alignment Val. <span class="sort-icon">↕</span></th>
+                        <th data-sort="is_valid" data-col="is_valid" class="hidden">Valid <span class="sort-icon">↕</span></th>
+                        <th data-sort="baseline_models" data-col="baseline_models" class="hidden">Baselines <span class="sort-icon">↕</span></th>
+                        <th data-sort="robustness_measures" data-col="robustness_measures" class="hidden">Robustness <span class="sort-icon">↕</span></th>
+                        <th data-sort="known_limitations" data-col="known_limitations" class="hidden">Limitations <span class="sort-icon">↕</span></th>
+                        <th data-sort="benchmarks_list" data-col="benchmarks_list" class="hidden">Benchmarks <span class="sort-icon">↕</span></th>
+                        <th class="actions-col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for detailed view -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

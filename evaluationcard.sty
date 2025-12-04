@@ -1,0 +1,266 @@
+%% evaluationcard.sty
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{evaluationcard}[2025/11/24]
+
+%% --- Packages ---
+\RequirePackage{xcolor}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{tabularx}
+\RequirePackage{array}
+\RequirePackage{microtype}
+\RequirePackage{xparse}
+\RequirePackage{pgfkeys}
+\RequirePackage{etoolbox}
+\RequirePackage{xstring}
+\RequirePackage{hyperref}
+\RequirePackage{setspace}
+\RequirePackage{tikz}
+
+%% --- Meta colors (exact from fairmeta.cls) ---
+\definecolor{metablue}{HTML}{0064E0}
+\definecolor{metafg}{HTML}{1C2B33}
+\definecolor{metabg}{HTML}{F1F4F7}
+
+%% --- Hyperlink colors ---
+\hypersetup{
+  colorlinks,
+  linkcolor=metablue,
+  citecolor=metablue,
+  urlcolor=metablue
+}
+
+%% --- Column types ---
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+
+%% --- Keys/defaults ---
+\pgfkeys{
+  /evalcard/.is family, /evalcard,
+  title/.initial = {},
+  subtitle/.initial = {},
+  authors/.initial = {},
+  link/.initial = {},
+  code-link/.initial = {},
+  date/.initial = {},
+  purpose/.initial = {},
+  principles-tested/.initial = {},
+  functional-props/.initial = {},
+  input-modality/.initial = {},
+  output-modality/.initial = {},
+  input-source/.initial = {},
+  output-source/.initial = {},
+  size/.initial = {},
+  splits/.initial = {},
+  design/.initial = {},
+  judge/.initial = {},
+  protocol/.initial = {},
+  model-access/.initial = {},
+  has-heldout/.initial = {false},
+  heldout-details/.initial = {},
+  alignment-validation/.initial = {},
+  is-valid/.initial = {false},
+  baseline-models/.initial = {},
+  robustness-measures/.initial = {},
+  known-limitations/.initial = {},
+  benchmarks-list/.initial = {},
+}
+
+%% --- Compact section heading ---
+\newcommand{\ecSection}[1]{%
+  {\normalsize\sffamily\bfseries\color{metablue}#1}\par
+  %\vspace{0.1cm}%
+}
+
+%% --- Field helper (smaller fonts) ---
+\newcommand{\ecField}[2]{%
+  \ifstrempty{#2}{}{%
+    \noindent{\footnotesize\sffamily\bfseries\color{metafg}#1:} {\footnotesize\color{metafg}#2}\par
+  }%
+}
+
+%% --- Two-column field helper ---
+\newcommand{\ecPairField}[4]{%
+  \ifstrempty{#2#4}{}{%
+    \noindent\begin{minipage}[t]{0.48\linewidth}
+      {\footnotesize\sffamily\bfseries\color{metafg}#1} {\footnotesize\color{metafg}#2}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}
+      {\footnotesize\sffamily\bfseries\color{metafg}#3} {\footnotesize\color{metafg}#4}
+    \end{minipage}\par
+  }%
+}
+
+%% =========================================================
+%% Main environment
+%% =========================================================
+\NewDocumentEnvironment{evaluationcard}{O{}}{%
+  \begingroup
+  \pgfkeys{/evalcard/.cd,#1}%
+  \def\ecTrue{true}%
+}{%
+  %% Configure tcolorbox with rotated badge overlay
+  \tcbset{enhanced,frame hidden}
+  \tcbset{left=0.4cm}
+  \tcbset{right=0.4cm}
+  \tcbset{top=0.4cm}
+  \tcbset{bottom=0.4cm}
+  \tcbset{arc=8pt}
+  \tcbset{colback=metabg}
+  \tcbset{before skip=0pt}
+  \tcbset{grow to left by=1.5pt}
+  \tcbset{grow to right by=1.5pt}
+  \tcbset{overlay={%
+    \node[
+      anchor=north,
+      rotate=0,
+      at=(frame.north),
+      %xshift=-2cm,
+      yshift=-0.1cm,
+      font=\small\sffamily\bfseries,
+      text=metablue
+    ] {EVALUATION CARD};
+  }}
+  
+  \begin{tcolorbox}
+    \setlength{\parindent}{0cm}
+    \setlength{\parskip}{0.2cm}
+
+    %% ======== HEADER ========
+    {%
+      \setlength{\parskip}{0cm}
+      \raggedright
+      \nohyphens
+      
+      %% Title
+      \ifstrempty{\pgfkeysvalueof{/evalcard/title}}{}{%
+        {\setstretch{1.3}\LARGE\sffamily\bfseries\color{metafg}\pgfkeysvalueof{/evalcard/title}\par}
+        \vskip 0.1cm
+      }
+      
+      %% Subtitle
+      \ifstrempty{\pgfkeysvalueof{/evalcard/subtitle}}{}{%
+        {\small\color{metafg}\pgfkeysvalueof{/evalcard/subtitle}\par}
+        \vskip 0.1cm
+      }
+      
+      %% Authors
+      \ifstrempty{\pgfkeysvalueof{/evalcard/authors}}{}{%
+        {\footnotesize\sffamily\bfseries\color{metafg}\pgfkeysvalueof{/evalcard/authors}\par}
+      }
+    }
+
+    %% Paper, Code, Date metadata
+    \vskip 0.2cm
+    {%
+      \setlength{\parskip}{0cm}
+      \footnotesize
+      \ifstrempty{\pgfkeysvalueof{/evalcard/link}}{}{%
+        {\sffamily\bfseries\color{metafg}Paper:} {\color{metablue}\url{\pgfkeysvalueof{/evalcard/link}}}\par
+      }
+      \ifstrempty{\pgfkeysvalueof{/evalcard/code-link}}{}{%
+        {\sffamily\bfseries\color{metafg}Code:} {\color{metablue}\url{\pgfkeysvalueof{/evalcard/code-link}}}\par
+      }
+      \ifstrempty{\pgfkeysvalueof{/evalcard/date}}{}{%
+        {\sffamily\bfseries\color{metafg}Date:} {\color{metafg}\pgfkeysvalueof{/evalcard/date}}\par
+      }
+    }
+
+    %% ======== ROW 1: What Does It Evaluate? (two-column content) ========
+    \ifstrempty{\pgfkeysvalueof{/evalcard/purpose}\pgfkeysvalueof{/evalcard/principles-tested}\pgfkeysvalueof{/evalcard/functional-props}\pgfkeysvalueof{/evalcard/input-modality}\pgfkeysvalueof{/evalcard/output-modality}}{}{%
+      \ecSection{What Does It Evaluate?}
+      \noindent\begin{minipage}[t]{0.48\linewidth}
+        \ecField{Purpose}{\pgfkeysvalueof{/evalcard/purpose}}
+        \ecField{Principles Tested}{\pgfkeysvalueof{/evalcard/principles-tested}}
+      \end{minipage}\hfill
+      \begin{minipage}[t]{0.48\linewidth}
+        \ecField{Functional Properties}{\pgfkeysvalueof{/evalcard/functional-props}}
+        \ecPairField{Input}{\pgfkeysvalueof{/evalcard/input-modality}}{Output}{\pgfkeysvalueof{/evalcard/output-modality}}
+      \end{minipage}
+    }
+
+    %% ======== ROW 2: How Does It Work? (two-column content) ========
+    \ifstrempty{\pgfkeysvalueof{/evalcard/judge}\pgfkeysvalueof{/evalcard/protocol}\pgfkeysvalueof{/evalcard/model-access}}{}{%
+      \ecSection{How Does It Work?}
+      \noindent\begin{minipage}[t]{0.48\linewidth}
+        \ecField{Judge}{\pgfkeysvalueof{/evalcard/judge}}
+        \ecField{Model Access}{\pgfkeysvalueof{/evalcard/model-access}}
+        \edef\ecHeldout{\pgfkeysvalueof{/evalcard/has-heldout}}%
+        \ifx\ecHeldout\ecTrue
+          \ecField{Held-out Test Set}{Yes}
+          \ifstrempty{\pgfkeysvalueof{/evalcard/heldout-details}}{}{%
+            {\footnotesize\color{metafg}\pgfkeysvalueof{/evalcard/heldout-details}}\par
+          }
+        \fi
+
+      \end{minipage}\hfill
+      \begin{minipage}[t]{0.48\linewidth}
+        \ecField{Protocol}{\pgfkeysvalueof{/evalcard/protocol}}
+        
+      \end{minipage}
+    }
+
+    %% ======== ROW 3: How Is It Structured? (two-column content) ========
+    \ifstrempty{\pgfkeysvalueof{/evalcard/input-source}\pgfkeysvalueof{/evalcard/output-source}\pgfkeysvalueof{/evalcard/size}\pgfkeysvalueof{/evalcard/splits}\pgfkeysvalueof{/evalcard/design}}{}{%
+      \vskip 0.1cm
+      \ecSection{How Is It Structured?}
+      \noindent\begin{minipage}[t]{0.48\linewidth}
+        \ecField{Input Source}{\pgfkeysvalueof{/evalcard/input-source}}
+        \ecField{Splits}{\pgfkeysvalueof{/evalcard/splits}}
+      \end{minipage}\hfill
+      \begin{minipage}[t]{0.48\linewidth}
+        \ecField{Output Source}{\pgfkeysvalueof{/evalcard/output-source}}
+        \ecField{Size}{\pgfkeysvalueof{/evalcard/size}}
+        \ecField{Design}{\pgfkeysvalueof{/evalcard/design}}
+      \end{minipage}
+    }
+
+    %% ======== ROW 4: Quality & Reliability (two-column content) ========
+    \ifstrempty{\pgfkeysvalueof{/evalcard/alignment-validation}\pgfkeysvalueof{/evalcard/baseline-models}\pgfkeysvalueof{/evalcard/robustness-measures}\pgfkeysvalueof{/evalcard/known-limitations}\pgfkeysvalueof{/evalcard/benchmarks-list}}{}{%
+      \vskip 0.1cm
+      \ecSection{Quality \& Reliability}
+      \noindent\begin{minipage}[t]{0.48\linewidth}
+        \ecField{Alignment Validation}{\pgfkeysvalueof{/evalcard/alignment-validation}}
+        
+        \edef\ecIsValid{\pgfkeysvalueof{/evalcard/is-valid}}%
+        \ifx\ecIsValid\ecTrue
+          \ecField{Validated}{Yes}
+        \fi
+        
+        \ecField{Baseline Models}{\pgfkeysvalueof{/evalcard/baseline-models}}
+        \ecField{Similar Benchmarks}{\pgfkeysvalueof{/evalcard/benchmarks-list}}
+      \end{minipage}\hfill
+      \begin{minipage}[t]{0.48\linewidth}
+        \ecField{Robustness Measures}{\pgfkeysvalueof{/evalcard/robustness-measures}}
+        \ecField{Known Limitations}{\pgfkeysvalueof{/evalcard/known-limitations}}
+      \end{minipage}
+    }
+
+  \end{tcolorbox}
+  \tcbset{reset}
+  \endgroup
+}
+
+%% --- Convenience setters ---
+\providecommand{\Purpose}[1]{\pgfkeys{/evalcard,purpose={#1}}}
+\providecommand{\PrinciplesTested}[1]{\pgfkeys{/evalcard,principles-tested={#1}}}
+\providecommand{\FunctionalProps}[1]{\pgfkeys{/evalcard,functional-props={#1}}}
+\providecommand{\InputModality}[1]{\pgfkeys{/evalcard,input-modality={#1}}}
+\providecommand{\OutputModality}[1]{\pgfkeys{/evalcard,output-modality={#1}}}
+\providecommand{\InputSource}[1]{\pgfkeys{/evalcard,input-source={#1}}}
+\providecommand{\OutputSource}[1]{\pgfkeys{/evalcard,output-source={#1}}}
+\providecommand{\Size}[1]{\pgfkeys{/evalcard,size={#1}}}
+\providecommand{\Splits}[1]{\pgfkeys{/evalcard,splits={#1}}}
+\providecommand{\Design}[1]{\pgfkeys{/evalcard,design={#1}}}
+\providecommand{\Judge}[1]{\pgfkeys{/evalcard,judge={#1}}}
+\providecommand{\Protocol}[1]{\pgfkeys{/evalcard,protocol={#1}}}
+\providecommand{\ModelAccess}[1]{\pgfkeys{/evalcard,model-access={#1}}}
+\providecommand{\HasHeldout}[1]{\pgfkeys{/evalcard,has-heldout={#1}}}
+\providecommand{\HeldoutDetails}[1]{\pgfkeys{/evalcard,heldout-details={#1}}}
+\providecommand{\AlignmentValidation}[1]{\pgfkeys{/evalcard,alignment-validation={#1}}}
+\providecommand{\IsValid}[1]{\pgfkeys{/evalcard,is-valid={#1}}}
+\providecommand{\BaselineModels}[1]{\pgfkeys{/evalcard,baseline-models={#1}}}
+\providecommand{\RobustnessMeasures}[1]{\pgfkeys{/evalcard,robustness-measures={#1}}}
+\providecommand{\KnownLimitations}[1]{\pgfkeys{/evalcard,known-limitations={#1}}}
+\providecommand{\BenchmarksList}[1]{\pgfkeys{/evalcard,benchmarks-list={#1}}}
+
+\endinput
