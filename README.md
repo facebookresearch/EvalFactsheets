@@ -117,10 +117,13 @@ This project is licensed under the cc-by-nc License - see the [LICENSE.md](LICEN
 **Citation**: If you use this tool in your research, please cite:
 
 ```bibtex
-@software{evalfactsheets2025,
-  title={EvalFactsheets},
-  author={Florian Bordes, Candace Ross, Justine T Kao, Evangelia Spiliopoulou, Adina Williams},
-  year={2025},
-  url={https://github.com/facebookresearch/EvalFactsheets}
+@misc{bordes2025evalfactsheetsstructuredframework,
+      title={Eval Factsheets: A Structured Framework for Documenting AI Evaluations}, 
+      author={Florian Bordes and Candace Ross and Justine T Kao and Evangelia Spiliopoulou and Adina Williams},
+      year={2025},
+      eprint={2512.04062},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2512.04062}, 
 }
 ```
